@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# this is the target file for adding in the various environment init
+# scripts for the shell
+
+# the names of the envs to source
+
+logouts={{ sh_logouts }}
+
+# source each env there
+for logout in $logouts; do
+    . "$SHELL_LOGOUT_DIR/${logout}.sh"
+done

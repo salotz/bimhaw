@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# source the different libraries of functions we want by default
+
+libs={{ sh_funcs }}
+
+for lib in $libs; do
+    . "${SHELL_FUNC_DIR}/${lib}.sh"
+done

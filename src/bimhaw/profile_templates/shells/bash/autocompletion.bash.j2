@@ -1,0 +1,8 @@
+#!/bin/bash
+
+libs={{ bash_autocompletions }}
+
+for lib in $libs; do
+    . "$BASH_AUTOCOMPLETE_DIR/${lib}.completion.bash"
+done
+

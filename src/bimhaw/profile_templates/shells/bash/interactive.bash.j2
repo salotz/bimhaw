@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# common functionality
+. "$ACTIVE_SH_DIR/funcs.sh"
+
+# common aliases
+. "$ACTIVE_SH_DIR/aliases.sh"
+
+# common environments for nonlogin shells
+
+# TODO: unify the lists of packages for the nonlogin and login
+# shells. Now they are basically duplicated because of this thing
+# here.
+
+# WARN: This is needs to be called because the login_env.sh file will not be
+# called when starting bash up.
+. "${ACTIVE_SH_DIR}/nonlogin_env.sh"
+
+# bash only interactive prompt configurations
+
+# bash only envs
+libs={{ bash_interactive_envs }}
+
+for lib in $libs; do
+    . "$BASH_ENV_DIR/${lib}.bash"
+done
+
+
+## Prompt customization
+
+. "$ACTIVE_BASH_DIR/prompt.bash"
+
+## autocompletion
+. "$ACTIVE_BASH_DIR/autocompletion.bash"
+

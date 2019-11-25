@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# source the different libraries of functions we want by default
+
+libs={{ bash_funcs }}
+
+for lib in $libs; do
+    . "$BASH_FUNC_DIR/${lib}.bash"
+done

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+## Set the ENV environmental variable.
+
+# This should be initialized here in a login shell and then all
+# non-login+interactive (NL+I) shells started from here will source
+# that in addition to this.
+
+# this script sets interactive specific things:
+# - aliases
+# - prompt customization
+
+# many interactive specific options are shell specific (i.e. not POSIX
+# or other standard shell) with the exception of aliases.
+
+export ENV="$ACTIVE_SH_DIR/interactive.sh"
+
+## Funcs
+
+. "$ACTIVE_SH_DIR/funcs.sh"
+
+
+## Environments
+
+. "$ACTIVE_SH_DIR/login_env.sh"

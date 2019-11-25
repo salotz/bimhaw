@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# should be the same as the normal shell
+
+. "$ACTIVE_SH_DIR/login.sh"
+
+## sh envs that only get executed from bash login, but aren't bash
+## specific
+sh_libs={{ bash_login_sh_envs }}
+
+# NOTE this is really only to avoid running keychain when we login via
+# GUI i.e. GNOME which only source .profile and the 'sh' path of
+# startup files
+
+for sh_lib in $sh_libs; do
+    . "$SHELL_ENV_DIR/${sh_lib}.sh"
+done
+
+
+## bash specific stuff
+
+# bash only envs
+
+libs={{ bash_login_bash_envs }}
+
+for lib in $libs; do
+    . "$BASH_ENV_DIR/${lib}.bash"
+done
+
+
+# we also add in bash specific functions
+
+. "$ACTIVE_BASH_DIR/funcs.bash"
+
+
