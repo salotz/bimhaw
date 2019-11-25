@@ -1,0 +1,140 @@
+
+* BIMHAW: BashIng My Head Against a Wall
+
+Cut the Gordian know of shell profiles on linux.
+
+#+begin_quote
+Whats the problem?
+#+end_quote
+
+
+Despite it being the most used interface as a linux user,
+configuration of shells is unnecessarily obtuse and lacks many
+important features.
+
+#+begin_quote
+I mean more specifically, and less ranty?
+#+end_quote
+
+1. Refactor shell startup scripts so that you can actually understand
+  without thinking about it too much. 
+
+Particularly the strange and subtle interactions between the system
+shell (called "sh" or "posix shell" throughout despite whatever true
+identity it has...).
+
+2. Provide for different shell "profiles"
+
+Having multiple profiles that are easily changed between is something
+that I found a great need for in a system. There are multiple use
+cases for this:
+
+- Different profiles for different computers or environments.
+- Always having a simple fall-back profile in case something breaks
+  and you really shouldn't be working on debugging your dotfiles.
+- Experimenting with new shell configurations without committing to
+  it.
+- Running demos, tutorials, or presentations where you want as little
+  as possible to be able to go wrong.
+- Activating your rice at the cafe, but then returning to your uncool
+  comfort setup in the comfort of your home.
+
+3. Proper (re)factoring of shell configuration scripts
+
+In addition to being very aesthetically messy and difficult to debug
+dumping all configuration into a single ~.bash_profile~ doesn't really
+work well for multiple profiles. Multiple profiles would require a lot
+of duplicated code/configuration since many of them will share the
+same features. So we provide a rough module system. Where modules are
+just scripts for different roles like environment, aliases, and
+autocompletion placed in certain directories. The modules for each
+profile are specified by name in configuration file.
+
+#+begin_quote
+Sounds complicated, whats the solution?
+#+end_quote
+
+** How it works
+
+To refactor the shell startup we provide a single set of replacement
+contentless startup files located at ~$HOME/.bimhaw/shell_dotfiles~.
+These in turn source another set of startup scripts with clean
+sensible names that are expected to be at ~$HOME/.bimhaw/active~.  These
+clean sensible ones are provided as templates (using jinja2) so you
+can easily generate many of them.  These scripts are also relatively
+contentless and will only contain listings of which modules they are
+to use (which come from the configuration file).
+
+The template generation and configuration reader are implemented as a
+python library and CLI tool.
+
+#+begin_src bash
+bimhaw profile.gen --name 'work'
+#+end_src
+
+This command will read ~.bimhaw/config.py~ (yes it uses ~exec~ so make
+sure you only have trusted code which shouldn't be a problem since it
+is just setting some strings).  It picks out the values for the 'work'
+profile and fills them into the template script files. The generated
+scripts as a collection are referred to as a single 'profile'. Once
+these are generated they are saved in ~.bimhaw/profiles/work~.
+
+However the ~shell_dotfiles~ expect profiles to be at the
+~.binhaw/active~ location, which we make a symlink to one of the
+profiles.  Running this command will both generate the profile and
+symlink ~.bimhaw/active~ to ~.bimhaw/profiles/work~:
+
+#+begin_src bash
+bimhaw profile.load --name 'work'
+#+end_src
+
+However, the profile won't be active yet for your bash or posix shell
+because it expects the following configuration files:
+
+- ~$HOME/.profile~
+- ~$HOME/.bash_profile~
+- ~$HOME/.bash_logout~
+- ~$HOME/.bashrc~
+
+To link the shells in the ~.bimhaw~ directory to those expected
+targets backup your existing shell scripts at the above locations and
+run:
+
+#+begin_src bash
+bimhaw link-shells
+#+end_src
+
+Those startup files should now be symlinks to
+~$HOME/.bimhaw/active/profile~ etc.
+
+We've solved this terrible legacy cruft with a couple levels of
+indirection and so is more complicated (i.e. not KISS some ugliness is
+necessary to get shit done I'm afraid). Here is the high level linking
+structure (roughly) to help you understand.:
+
+#+begin_example
+shell startup --> ~.profile~ --> ~.bimhaw/shell_dotfiles/profile~ --> ~.bimhaw/active~ --> ~.bimhaw/profiles/work~ --> ~.bimhaw/lib/shell~
+#+end_example
+
+
+** Configuring your shells: modules
+
+There are a few different roles of modules:
+
+- envs :: define environmental variables, call other executables,
+          etc. most of the "code" part of configuration
+- funcs :: functions in the bash or sh sense, whatever that means
+- aliases :: things you create with the shell builtin ~alias~
+- logouts :: scripts to run when you logout
+- prompts :: choice of a prompt
+- autocompletion :: autocompletion scripts (bash only)
+
+The modules for posix shell are in ~.bimhaw/lib/shell/sh~ and for bash
+they are in ~.bimhaw/lib/shell/bash~.
+
+It's important to note that in ~bimhaw~ all modules in a profile that
+are loaded for 'sh' will also be loaded for 'bash'. The modules
+specified for bash will be /bash only/. This allows for "pure" and
+"portable" posix sh scripts (we all know you ~sh~ scripts are only of
+the highest quality and POSIX compliant...) and also configurations
+with bashisms.
