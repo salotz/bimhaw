@@ -138,3 +138,18 @@ specified for bash will be /bash only/. This allows for "pure" and
 "portable" posix sh scripts (we all know you ~sh~ scripts are only of
 the highest quality and POSIX compliant...) and also configurations
 with bashisms.
+
+* Getting Started
+
+Install it from the git repo directly:
+
+#+begin_src bash
+pip install https://github.com/salotz/bimhaw.git
+#+end_src
+
+Once you have it installed you will need to create a configuration
+directory at ~$HOME/.bimhaw~.
+
+You can and should do this with the initialization command:
+
+

@@ -1,4 +1,20 @@
--e .
+# core
+pip
+wheel
+twine
 
+# utilities
+bumpversion
+
+# task running
+invoke
+
+# tooling
+gitpython
+
+# interactive and debugging
 ipython
 pdbpp
+
+
+-e .

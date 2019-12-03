@@ -1,0 +1,32 @@
+#!/bin/bash
+
+. "$HOME/.bimhaw/env.sh"
+
+# Run the login script for bash
+. "$ACTIVE_BASH_DIR/login.bash"
+
+# In order to support NL+NI scripts from within a login session we
+# need to set the BASH_ENV variable at login, however, due to bash
+# being strange on a L+NI invocation it will source .bash_profile
+# (this script), and consequently the login process and the general
+# purpose 'sh' login environment and the script at BASH_ENV, which
+# should also be setting up the environment for a NL+NI script, and so
+# those common scripts will get run twice. So we first export BASH_ENV
+# to be used throughout this login session and then override it for
+# this particular startup so that it doesn't get run twice.
+
+# the approach outlined above doesn't seem to work. THe internet seems
+# to think there is no good way to do this. I will let this lie and
+# make scripts do it on their own or if you are running commands:
+# `bash -lc "command"`
+
+# export BASH_ENV="$ACTIVE_SH_DIR/nonlogin_env.sh"
+
+# otherwise make sure it isn't set
+BASH_ENV=""
+
+
+# Run the interactive bash script if this is a login shell
+if [ "$PS1" ]; then
+    . "$ACTIVE_BASH_DIR/interactive.bash"
+fi

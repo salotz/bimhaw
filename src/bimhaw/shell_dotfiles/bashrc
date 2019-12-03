@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# general profile management environmental variables
+. "$HOME/.bimhaw/env.sh"
+
+# startup file for non-login interactive shell
+. "$ACTIVE_BASH_DIR/interactive.bash"
+
+
+####
+
+# code in here won't be run. This is just a cage for programs that
+# inctrospect your dotfiles to see if the correct initialization is
+# present, annoying I know but something we have to deal with...
+
+if false; then
+
+>&2 echo "sanity check; shouldn't be running this"
+
+fi
