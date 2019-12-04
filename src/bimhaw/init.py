@@ -4,8 +4,11 @@ import pkgutil
 import os
 import os.path as osp
 
+from bimhaw import CONFIG_DIR
+
 SHELL_DOTFILES_DIRNAME = 'shell_dotfiles'
 LIB_DIRNAME = 'lib'
+PROFILES_DIRNAME = 'profiles'
 
 SHELL_DOTFILE_NAMES = (
     'profile',
@@ -34,11 +37,7 @@ LIB_DIRS = (
 @click.command()
 def cli():
 
-    bimhaw_dir = osp.expanduser(osp.expandvars(
-        "$HOME/.bimhaw"))
-
-    dotfiles_dir = osp.join(bimhaw_dir, SHELL_DOTFILES_DIRNAME)
-
+    dotfiles_dir = osp.join(CONFIG_DIR, SHELL_DOTFILES_DIRNAME)
     os.makedirs(dotfiles_dir)
 
     # load the shell files
@@ -52,7 +51,7 @@ def cli():
             wf.write(dotfile)
 
     # then make the lib dirs
-    lib_dir = osp.join(bimhaw_dir, LIB_DIRNAME)
+    lib_dir = osp.join(CONFIG_DIR, LIB_DIRNAME)
 
     os.makedirs(lib_dir)
 
@@ -60,6 +59,18 @@ def cli():
         sub_dir = osp.join(lib_dir, sub_lib_dir)
         os.makedirs(sub_dir)
 
+    # then generate the default config.py file
+    config_str = pkgutil.get_data(__name__,
+                                  'profile_config/config.py')
+
+    config_path = osp.join(CONFIG_DIR, 'config.py')
+    with open(config_path, 'wb') as wf:
+        wf.write(config_str)
+
+
+    # the profiles dir
+    profiles_dir = osp.join(CONFIG_DIR, PROFILES_DIRNAME)
+    os.makedirs(profiles_dir)
 
 
 if __name__ == "__main__":

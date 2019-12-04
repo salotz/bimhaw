@@ -1,6 +1,13 @@
 #!/bin/sh
 
-. "$HOME/.bimhaw/env.sh"
+# load the environment
+# we must play with the IFS because eval is funny about splitting on
+# newlines in the source
+old_ifs="$IFS"
+IFS="\n"
+eval $(python3 -m bimhaw.env)
+IFS="$old_ifs"
+
 
 # WARNING: if you delete .bash_profile, this file becomes part of
 # bash's startup sequence, which means this file suddenly has to cater

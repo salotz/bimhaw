@@ -3,8 +3,11 @@
 # Customize the command prompt
 
 # source the different libraries of functions we want by default
+none_prompt="BIMHAW_NONE_PROFILE_SPECIAL_STRING"
 
 prompt={{ bash_prompt }}
 
-. "${BASH_PROMPT_DIR}/${prompt}.bash"
+if [ "$prompt" != "$none_prompt" ]; then
+    source "${BASH_PROMPT_DIR}/${prompt}.bash"
+fi
 

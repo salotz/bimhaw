@@ -1,7 +1,14 @@
 #!/bin/bash
 
 # general profile management environmental variables
-. "$HOME/.bimhaw/env.sh"
+# load the environment
+
+# we must play with the IFS because eval is funny about splitting on
+# newlines in the source
+old_ifs="$IFS"
+IFS="\n"
+eval $(python3 -m bimhaw.env)
+IFS="$old_ifs"
 
 # startup file for non-login interactive shell
 . "$ACTIVE_BASH_DIR/interactive.bash"

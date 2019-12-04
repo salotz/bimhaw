@@ -152,4 +152,221 @@ directory at ~$HOME/.bimhaw~.
 
 You can and should do this with the initialization command:
 
+#+begin_src bash
+python -m bimhaw.init
+#+end_src
+
+Now you should have a ~$HOME/.bimhaw~ directory with some folders.
+
+This will fail if the directory already exists.
+
+Now that we have the configuration directory setup we want to set up a
+profile to use.
+
+To create profiles we run the main command line application:
+
+#+begin_src bash
+bimhaw profile.gen --name 'bimhaw'
+#+end_src
+
+If you run it like this you will create the default and only built-in
+profile that bimhaw has called 'bimhaw'. If you want to create your
+own profiles you will need to edit the ~~/.bimhaw/config.py~ file
+which is discussed in [[*Creating new profiles][Creating new profiles]].
+
+Now we need to activate this profile which is simply done by running:
+
+#+begin_src bash
+bimhaw profile.load --name 'bimhaw'
+#+end_src
+
+This simply makes the symbolic link ~.bimhaw/active~ point to the
+specified profile directory.
+
+And technically it will also rerun the ~profile.gen~ subcommand again,
+so in the future you only have to run the one command.
+
+To actually get this profile loaded upon startup of your shell we need
+to link the actual shell startup files to the ones where the shell
+programs expect them to be.
+
+Please go and back up your current dotfiles, these dotfiles will need
+to be turned into symbolic links:
+
+- ~$HOME/.profile~
+- ~$HOME/.bash_profile~
+- ~$HOME/.bash_logout~
+- ~$HOME/.bashrc~
+
+Once they are backed up you can run:
+
+#+begin_src bash
+bimhaw link-shells
+#+end_src
+
+If you didn't delete or move the listed startup files then either do
+so or run with the 'force' flag:
+
+#+begin_src bash
+bimhaw link-shells --force
+#+end_src
+
+
+** Creating new profiles
+
+Lets say we want to create a common use profile.
+
+We would edit the ~config.py~ file so that it looked something like
+this:
+
+#+begin_src python
+  PROFILES = [
+    'bimhaw',
+    'common',
+  ]
+
+  # POSIX shell (whatever that is)
+  SH_LOGIN_ENVS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+
+
+  SH_NONLOGIN_ENVS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+
+  # scripts to run on logout
+  SH_LOGOUTS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+
+  }
+
+
+  # salotz.sh_aliases
+  SH_ALIASES = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+
+  }
+
+
+  # salotz.sh_funcs
+  SH_FUNCS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+
+  }
+
+
+  SH_PROMPT = {
+    'bimhaw' : 'default',
+    'common' : 'default',
+  }
+
+  BASH_PROMPT = {
+    'bimhaw' : 'default',
+    'common' : 'default',
+  }
+
+  BASH_LOGIN_SH_ENVS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+  BASH_LOGIN_BASH_ENVS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+
+  BASH_NONLOGIN_ENVS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+  BASH_INTERACTIVE_ENVS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+  BASH_ALIASES = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+  BASH_FUNCS = {
+
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+
+  BASH_AUTOCOMPLETIONS = {
+    'bimhaw' : [
+    ],
+
+    'common' : [
+    ],
+  }
+#+end_src
+
+Apologies for the verboseness, but I didn't want to commit to any
+configuration system as of now.
+
+Since there are no config files to differentiate the 'common' profile
+from the 'bimhaw' it will be the same. You can add new content for it
+by adding files to the folders in the ~lib~ directory.
+
+To create this profile run:
+
+#+begin_src bash
+bimhaw profile.gen --name common
+#+end_src
 

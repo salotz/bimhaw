@@ -31,6 +31,7 @@ BASH_TEMPLATES = (
 
 SINGULARS = ('bash_prompt', 'sh_prompt',)
 
+NONE_PROFILE = "BIMHAW_NONE_PROFILE_SPECIAL_STRING"
 
 def load_profile_templates():
 
@@ -102,7 +103,7 @@ mirroring that structure."""
 
             dir_path = osp.join(root_dir, key)
 
-            os.makedirs(osp.join(root_dir, key))
+            os.makedirs(osp.join(root_dir, key), exist_ok=True)
 
             make_dict_dir_struct(dir_path, sub)
 
@@ -139,6 +140,12 @@ def get_profile_data(profile_name):
 
     }
 
+    if profile_data['sh_prompt'] is None:
+        profile_data['sh_prompt'] = NONE_PROFILE
+
+    if profile_data['bash_prompt'] is None:
+        profile_data['bash_prompt'] = NONE_PROFILE
+
     return profile_data
 
 
@@ -150,12 +157,10 @@ def format_profile_data(profile_data):
 
         if type(data) == str:
             fmt_value = "'{}'".format(data)
-            print("formatting string {} as {}".format(data, fmt_value))
 
         else:
             # format for a space delimited list in the shell
             fmt_value = "'{}'".format(" ".join(data))
-            print("formatting data {} as {}".format(data, fmt_value))
 
         new_d[key] = fmt_value
 

@@ -2,6 +2,10 @@
 
 ## Prompt customization
 
+none_prompt="BIMHAW_NONE_PROFILE_SPECIAL_STRING"
+
 prompt={{ sh_prompt }}
 
-. "${SHELL_PROMPT_DIR}/${prompt}.sh"
+if [ "$prompt" != "$none_prompt" ]; then
+    . "${SHELL_PROMPT_DIR}/${prompt}.sh"
+fi
