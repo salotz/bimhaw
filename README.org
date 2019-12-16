@@ -144,7 +144,7 @@ with bashisms.
 Install it from the git repo directly:
 
 #+begin_src bash
-pip install https://github.com/salotz/bimhaw.git
+pip install git+https://github.com/salotz/bimhaw.git
 #+end_src
 
 Once you have it installed you will need to create a configuration
@@ -183,8 +183,7 @@ bimhaw profile.load --name 'bimhaw'
 This simply makes the symbolic link ~.bimhaw/active~ point to the
 specified profile directory.
 
-And technically it will also rerun the ~profile.gen~ subcommand again,
-so in the future you only have to run the one command.
+#+TODO: And technically it will also rerun the ~profile.gen~ subcommand again, so in the future you only have to run the one command.
 
 To actually get this profile loaded upon startup of your shell we need
 to link the actual shell startup files to the ones where the shell

@@ -5,7 +5,7 @@
 # we must play with the IFS because eval is funny about splitting on
 # newlines in the source
 old_ifs="$IFS"
-IFS="\n"
+IFS=$'\n'
 eval $(python3 -m bimhaw.env)
 IFS="$old_ifs"
 

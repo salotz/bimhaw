@@ -40,7 +40,7 @@ def profile_gen(cx, name='bimhaw'):
 profile_ns.add_task(profile_gen, name='gen')
 
 
-@task(pre=[profile_gen], default=True)
+@task(default=True)
 def profile_load(cx, name='bimhaw'):
 
     if name not in config.PROFILES:
@@ -50,6 +50,12 @@ def profile_load(cx, name='bimhaw'):
 
 profile_ns.add_task(profile_load, name='load')
 
+@task
+def profile_ls(cx):
+
+    print('\n'.join(config.PROFILES))
+
+profile_ns.add_task(profile_ls, name='ls')
 
 ## Top level
 main_ns = Collection()
