@@ -183,7 +183,12 @@ bimhaw profile.load --name 'bimhaw'
 This simply makes the symbolic link ~.bimhaw/active~ point to the
 specified profile directory.
 
-#+TODO: And technically it will also rerun the ~profile.gen~ subcommand again, so in the future you only have to run the one command.
+And technically it will also rerun the ~profile.gen~ subcommand again,
+so in the future you only have to run the one command.
+
+#+begin_src bash
+bimhaw profile --name bimhaw
+#+end_src
 
 To actually get this profile loaded upon startup of your shell we need
 to link the actual shell startup files to the ones where the shell
