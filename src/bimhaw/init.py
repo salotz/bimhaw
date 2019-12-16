@@ -35,7 +35,9 @@ LIB_DIRS = (
 )
 
 @click.command()
-def cli():
+@click.option("--config", default=None, type=click.Path(exists=True))
+@click.option("--lib", default=None, type=click.Path(exists=True))
+def cli(config, lib):
 
     dotfiles_dir = osp.join(CONFIG_DIR, SHELL_DOTFILES_DIRNAME)
     os.makedirs(dotfiles_dir)
@@ -50,22 +52,45 @@ def cli():
         with open(path, 'wb') as wf:
             wf.write(dotfile)
 
-    # then make the lib dirs
+
+    # connect to or make a lib dir
+
+    # the default, not loading an external one
     lib_dir = osp.join(CONFIG_DIR, LIB_DIRNAME)
 
-    os.makedirs(lib_dir)
+    if lib is None:
 
-    for sub_lib_dir in LIB_DIRS:
-        sub_dir = osp.join(lib_dir, sub_lib_dir)
-        os.makedirs(sub_dir)
+        os.makedirs(lib_dir)
 
-    # then generate the default config.py file
-    config_str = pkgutil.get_data(__name__,
-                                  'profile_config/config.py')
+        for sub_lib_dir in LIB_DIRS:
+            sub_dir = osp.join(lib_dir, sub_lib_dir)
+            os.makedirs(sub_dir)
+
+    else:
+        # load the external one via a symlink
+        os.symlink(lib, lib_dir)
+
+    ## Generate or link to the config file
 
     config_path = osp.join(CONFIG_DIR, 'config.py')
-    with open(config_path, 'wb') as wf:
-        wf.write(config_str)
+    if config is None:
+        # generate the default config.py file
+        config_str = pkgutil.get_data(__name__,
+                                      'profile_config/config.py')
+
+        with open(config_path, 'wb') as wf:
+            wf.write(config_str)
+
+    else:
+        os.symlink(config, config_path)
+
+    # then generate the default env.sh file
+    env_str = pkgutil.get_data(__name__,
+                                  'env_script/env.sh')
+
+    env_path = osp.join(CONFIG_DIR, 'env.sh')
+    with open(env_path, 'wb') as wf:
+        wf.write(env_str)
 
 
     # the profiles dir

@@ -30,18 +30,20 @@ def link_shells(cx, force=False):
 
 profile_ns = Collection()
 
-@task
 def profile_gen(cx, name='bimhaw'):
 
     profile_dir = osp.join(CONFIG_DIR, 'profiles')
 
     write_profile(profile_dir, name)
 
-profile_ns.add_task(profile_gen, name='gen')
+profile_ns.add_task(task(profile_gen), name='gen')
 
 
 @task(default=True)
 def profile_load(cx, name='bimhaw'):
+
+    # generate the profile
+    profile_gen(cx, name=name)
 
     if name not in config.PROFILES:
         raise ValueError(f"Profile {name} not found")

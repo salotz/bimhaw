@@ -4,11 +4,12 @@
 
 # we must play with the IFS because eval is funny about splitting on
 # newlines in the source
-old_ifs="$IFS"
-IFS=$'\n'
-eval $(python3 -m bimhaw.env)
-IFS="$old_ifs"
+# old_ifs="$IFS"
+# IFS=$'\n'
+# eval $(python3 -m bimhaw.env)
+# IFS="$old_ifs"
 
+source "$HOME/.bimhaw/env.sh" || exit 1
 
 # Run the login script for bash
 . "$ACTIVE_BASH_DIR/login.bash"
