@@ -374,3 +374,224 @@ To create this profile run:
 bimhaw profile.gen --name common
 #+end_src
 
+
+
+* Diatribe
+
+** Shells
+
+A system is interacted with by a shell and so the shells must be the
+first thing to be configured.
+
+Unfortunately, on unix-like systems, such as linux, the configuration
+of shells is extremely and unnecessarily complex for historical
+reasons.
+
+
+*** Introduction to the complexity of unix shells
+
+The first thing we must consider is the features implementated by the
+shell (or shells) that will be on the systems you will be configuring.
+
+
+Furthermore, the capabilities, features, and syntax of shells is
+highly divergent. This would be okay if there were value-added shells
+that could be used on specific systems and setups, were there a
+standard shell that could be used across different systems.
+
+This is why the POSIX shell standard was developed, which is only a
+*specification* and not an implementation.
+
+This specification furthermore is dated and idiosyncratic, and no
+shell implements the specified features on a 1:1 basis.
+
+The most used shells, bash and zsh, implement many more features than
+the POSIX shell and the use of scripts written with them will vary
+from system to system.
+
+A shell script written adhering to the POSIX standards should run in
+all shells, but it requires that the author understand that all
+features of the shell they are using should not be used.
+
+Of course this is not entirely true in practice and there are
+discrepencies between the shells.
+
+So the best advice for writing shell scripts that are meant to be
+portable is to keep them very simple.
+
+If you need more advanced control flow, consider using a shell or
+programming language (that is a more sane language than a bash-type
+language) which is easily available on all systems you wish to
+configure (such as python).
+
+To make matters worse (at least) bash has the ability to run in a
+separate mode that alters its behavior to adhere more to a pure POSIX
+shell.
+
+This can happen if an explicit flag is raised during invocation, or if
+the ~/bin/sh~ file is a symlink to the bash binary (I know a rather
+strange and special case behavior). Details on the change in behavior
+can be found here:
+https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html
+
+The shell executable located at ~/bin/sh~ is for all POSIX systems
+assumed to be a POSIX compliant shell and should be declared as the
+runner for all scripts intended to be executed by a POSIX shell. That
+is scripts that are intended to be portable across POSIX operating
+systems.
+
+Different distros use different shells for ~/bin/sh~ but the most
+popular seem to be ~dash~ (Debian Almquist Shell) and ~bash~.
+
+Bash is used because it is the most widely used shell, however, it
+will be run in compatibility mode as described above and will not be
+the shell you know, and perhaps love.
+
+The ~dash~ shell is used because it is much faster than other shells
+and is an attempt to be as compliant as possible to the POSIX
+standard. I will assume for my purposes that ~dash~ /is/ the reference
+implementation of the POSIX shell. So any script that is written
+should be tested against the ~dash~ shell before being considered
+portable.
+
+*** Configuring shell startups
+
+Configuring the runtime properties and environment of a shell is also
+a convoluted mess, in part due to a complex set of different modes
+that shells can be started in and a mistrust on the adherence to the
+behavior that is documented in the manual.
+
+The documented behavior is shown in this diagram:
+
+[[file:docs/shell-startup.png]]
+
+Basically a shell can be started with 3 options:
+
+- login or nonlogin
+- interactive or batch
+- local or remote
+
+The files that get read and executed as part of the configuration
+changes with which modes are activated.
+
+Here is a table showing which configuration scripts are executed and
+in what order for different options. The labelled columns are the
+different states that trigger sourcing of files.
+
+Files are sourced in alphabetic order. Numbers indicate choices for
+sourcing at a given stage, and the lowest number will be searched for
+first. The first one encountered will be sourced and the rest will be
+skipped.
+
+|------------------+-------------+-------------+--------+-----------+--------|
+|                  | Interactive | Interactive | Batch  | Batch     | Remote |
+|------------------+-------------+-------------+--------+-----------+--------|
+|                  | login       | non-login   | login  | non-login |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+| /etc/profile     | A           |             |        | A         |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+| /etc/bash.bashrc |             | A           |        |           |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+| ~/.bashrc        |             | B           |        |           | A      |
+|------------------+-------------+-------------+--------+-----------+--------|
+| ~/.bash_profile  | B1          |             |        | B1        |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+| ~/.bash_login    | B2          |             |        | B2        |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+| ~/.profile       | B3          |             |        | B3        |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+| BASH_ENV         |             |             | A      | C         |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+|                  | Logout      |             | Logout |           |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+| ~/.bash_logout   | A           |             | A      |           |        |
+|------------------+-------------+-------------+--------+-----------+--------|
+
+
+Here is the table for POSIX shells:
+
+|------------+-------------+-------------+-------+-----------|
+|            | Interactive | Interactive | Batch | Batch     |
+|------------+-------------+-------------+-------+-----------|
+|            | login       | non-login   | login | non-login |
+|------------+-------------+-------------+-------+-----------|
+| ~/.profile | A           |             | A     |           |
+|------------+-------------+-------------+-------+-----------|
+| ENV        | B           | A           |       |           |
+|------------+-------------+-------------+-------+-----------|
+
+
+Because of the complexity of this process and the fact that we don't
+want to duplicate the coding of environments which will be the same
+between shells, we code these common configurations in POSIX shell.
+
+To map onto these logical categories of different shell stages we
+write shell scripts for each shell in the 'shells' directory.
+
+These scripts include:
+
+- env
+- interactive
+- login
+- logout
+
+The 'env' script is run for all cases including batch and the others
+are to be run for their respective states.
+
+Through clever sourcing of these dependencies between these files
+among different shells we can separate configurations common to all
+POSIX shells (in the ~posix~ dir) and for each specific shell, each
+having a dir with it's namesake.
+
+These initialization files are intended to encapsulate the logic
+necessary for this trick of dependencies, and most of the actual
+content of the configurations is found, logically, in with the rest of
+the configurations under the name of the shell, which may have
+configurations added as if it were any other program.
+
+To deploy these shell scripts to a system however we provide the
+'dotfiles' indicated in the tables above, in the ~shells/dotfiles~
+folder. The mapping of these file names to their locations in a system
+filesystem can be found in ~shells.config.toml~. 
+
+The script ~bin/link_shells.sh~ will create symlinks in the system to
+the appropriate shell configuration "dotfiles" for the current user,
+assuming the dotsalotz repository is at ~$HOME/.salotz.d~.
+
+
+
+*** Configuring shell environments
+
+To configure the shells environment (and thus behavior) find the
+relevant directory in the ~configs~ folder and edit the files there.
+
+The ~interactive.sh~ file will be run in an interactive shell and
+should be used to set:
+
+- aliases
+- functions
+- prompt appearance
+- autocompletion
+- other interactive shell specific features
+
+The more important file is the ~env.sh~ file which is currently only
+in the ~sh~ config as there are no bash specific environmental
+features and this should be favored over the bash config folder unless
+you know it to be necessary.
+
+Some configuration files don't contain any configuration themselves,
+but simply source configurations from their associated collection of
+files of the same basename. These include:
+
+- sh
+  - env.sh
+  - funcs.sh
+- bash
+  - funcs.bash
+  - autocompletion.bash
+
+To configure which files are sourced change the names in the `lib`
+array in those scripts.
+
+This may improve in the future.
+
