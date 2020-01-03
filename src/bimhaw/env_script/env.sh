@@ -11,10 +11,19 @@ export UTILS_DIR="$BIMHAW_DIR/utils";
 
 # the symlink to the active profile directory
 export ACTIVE_PROFILE_DIR="$BIMHAW_DIR/active";
-export ACTIVE_BIN_DIR="$ACTIVE_PROFILE_DIR/bin";
-export ACTIVE_CONFIGS_DIR="$ACTIVE_PROFILE_DIR/configs";
-export ACTIVE_SETUPS_DIR="$ACTIVE_PROFILE_DIR/setups";
-export ACTIVE_SHELLS_DIR="$ACTIVE_PROFILE_DIR/shells";
+
+# TODO DEPRECATE, small paths are alright here and just as easy to
+# remember and less opaque
+
+# libraries for the profile
+export ACTIVE_SHELLS_DIR="$ACTIVE_PROFILE_DIR/lib/shell";
+export ACTIVE_CONFIGS_DIR="$ACTIVE_PROFILE_DIR/lib/configs";
+export ACTIVE_SETUPS_DIR="$ACTIVE_PROFILE_DIR/lib/setups";
+export ACTIVE_BIN_DIR="$ACTIVE_PROFILE_DIR/lib/bin";
+export ACTIVE_CHECKINS_DIR="$ACTIVE_PROFILE_DIR/lib/checkins";
+export ACTIVE_CHECKOUTS_DIR="$ACTIVE_PROFILE_DIR/lib/checkouts";
+export ACTIVE_INITS_DIR="$ACTIVE_PROFILE_DIR/lib/inits";
+export ACTIVE_RESOURCES_DIR="$ACTIVE_PROFILE_DIR/lib/resources";
 
 # shell specific things since they are relatively finite
 export ACTIVE_BASH_DIR="$ACTIVE_SHELLS_DIR/bash";
@@ -24,6 +33,8 @@ export ACTIVE_XONSH_DIR="$ACTIVE_SHELLS_DIR/xonsh";
 # other shared directories
 export LIB_DIR="$BIMHAW_DIR/lib";
 
+# TODO DEPRECATE
+
 # binaries
 export BIN_LIB_DIR="$LIB_DIR/bin";
 # configs
@@ -31,6 +42,7 @@ export CONFIGS_LIB_DIR="$LIB_DIR/configs";
 # setup scripts
 export SETUPS_LIB_DIR="$LIB_DIR/setups";
 
+# END DEPRECATE
 
 ### Shell configs
 

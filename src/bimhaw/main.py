@@ -34,7 +34,16 @@ def profile_gen(cx, name='bimhaw'):
 
     profile_dir = osp.join(CONFIG_DIR, 'profiles')
 
+    # write out the main shell profile script files with configs in
+    # them
     write_profile(profile_dir, name)
+
+    # link the appropriate config files
+
+    # TODO: currently we just link all of them since we don't have a
+    # way to select them in the config yet, but we want to make the
+    # right API for env variables in scripts
+    cx.run(f'ln -s -r -T "$HOME/.bimhaw/lib" "{profile_dir}/lib"')
 
 profile_ns.add_task(task(profile_gen), name='gen')
 
@@ -58,6 +67,51 @@ def profile_ls(cx):
     print('\n'.join(config.PROFILES))
 
 profile_ns.add_task(profile_ls, name='ls')
+
+
+## Setups
+
+# modules that get run once per environment (.e.g on new install of
+# OS) such as installing packages or setting up directories etc.
+
+setups_ns = Collection()
+
+## Inits
+
+# modules that get run per session but manually so
+
+inits_ns = Collection()
+
+## Bins
+
+# executables that are callable from bimhaw. Can use to organize those
+# scripts in the "misc" folder.
+
+bin_ns = Collection()
+
+## Check ins/outs
+
+# scripts to run for different working sets "wsets" for when you
+# arrive at a specific machine. Useful for keeping a large set of git
+# repos in sync or a sneaker-net of updating your computer.
+
+checkin_ns = Collection()
+checkout_ns = Collection()
+
+
+
+## Configs
+
+# configurations, just able to show which ones are available
+
+
+## Resources
+
+# not configuration, but pure and utter data. For resources scripts in
+# any other module might rely on
+
+
+
 
 ## Top level
 main_ns = Collection()
