@@ -16,6 +16,8 @@ from setuptools import setup, find_packages
 
 abstract_requirements = [
     'invoke',
+    'jinja2',
+    'click',
     ]
 
 setup(

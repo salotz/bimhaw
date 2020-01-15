@@ -25,6 +25,13 @@ def link_shells(cx, force=False):
 
     cx.run(f'ln -s -r {force_str} "$HOME/.bimhaw/shell_dotfiles/bashrc" "$HOME/.bashrc"')
 
+@task
+def current(cx):
+
+    result = cx.run('readlink "$HOME/.bimhaw/active"', hide=True)
+
+    profile_str = result.stdout.strip().split('/')[-1]
+    print(profile_str)
 
 ## Profile
 
@@ -43,7 +50,7 @@ def profile_gen(cx, name='bimhaw'):
     # TODO: currently we just link all of them since we don't have a
     # way to select them in the config yet, but we want to make the
     # right API for env variables in scripts
-    cx.run(f'ln -s -r -T "$HOME/.bimhaw/lib" "{profile_dir}/lib"')
+    cx.run(f'ln -f -s -r -T "$HOME/.bimhaw/lib" "{profile_dir}/lib"')
 
 profile_ns.add_task(task(profile_gen), name='gen')
 
@@ -120,7 +127,7 @@ main_ns = Collection()
 main_ns.add_collection(profile_ns, name='profile')
 
 # individual tasks
-tasks = [link_shells,]
+tasks = [link_shells, current,]
 for task in tasks:
     main_ns.add_task(task)
 
