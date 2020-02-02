@@ -2,7 +2,7 @@
 
 # should be the same as the normal shell
 
-. "$ACTIVE_SH_DIR/login.sh"
+. "$BIMHAW_DIR/active/shells/bash/login.sh"
 
 ## sh envs that only get executed from bash login, but aren't bash
 ## specific
@@ -13,7 +13,7 @@ sh_libs={{ bash_login_sh_envs }}
 # startup files
 
 for sh_lib in $sh_libs; do
-    . "$SHELL_ENV_DIR/${sh_lib}.sh"
+    . "$BIMHAW_DIR/active/lib/sh/envs/${sh_lib}.sh"
 done
 
 
@@ -24,12 +24,12 @@ done
 libs={{ bash_login_bash_envs }}
 
 for lib in $libs; do
-    . "$BASH_ENV_DIR/${lib}.bash"
+    . "$BIMHAW_DIR/active/lib/bash/envs/${lib}.bash"
 done
 
 
 # we also add in bash specific functions
 
-. "$ACTIVE_BASH_DIR/funcs.bash"
+. "$BIMHAW_DIR/active/shells/bash/funcs.bash"
 
 

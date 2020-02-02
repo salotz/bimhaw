@@ -8,6 +8,6 @@ none_prompt="BIMHAW_NONE_PROFILE_SPECIAL_STRING"
 prompt={{ bash_prompt }}
 
 if [ "$prompt" != "$none_prompt" ]; then
-    source "${BASH_PROMPT_DIR}/${prompt}.bash"
+    source "$BIMHAW_DIR/active/lib/bash/prompts/${prompt}.bash"
 fi
 

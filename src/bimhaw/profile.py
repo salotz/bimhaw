@@ -2,7 +2,6 @@ import pkgutil
 import os
 import os.path as osp
 
-import click
 from jinja2 import Template
 
 from . import config
@@ -184,14 +183,3 @@ def write_profile(root_dir, profile_name):
 
     make_dict_dir_struct(profile_dir, profile_d)
 
-
-@click.command()
-@click.argument('profile_name')
-@click.argument('dir', type=click.Path(exists=True))
-def cli(profile_name, dir):
-
-    write_profile(dir, profile_name)
-
-if __name__ == "__main__":
-
-    cli()

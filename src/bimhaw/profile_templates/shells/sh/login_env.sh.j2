@@ -9,5 +9,5 @@ envs={{ sh_login_envs }}
 
 # source each env there
 for env in $envs; do
-    . "$SHELL_ENV_DIR/${env}.sh"
+    . "$BIMHAW_DIR/active/lib/sh/envs/${env}.sh"
 done

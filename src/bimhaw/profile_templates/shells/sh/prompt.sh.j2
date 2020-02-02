@@ -7,5 +7,5 @@ none_prompt="BIMHAW_NONE_PROFILE_SPECIAL_STRING"
 prompt={{ sh_prompt }}
 
 if [ "$prompt" != "$none_prompt" ]; then
-    . "${SHELL_PROMPT_DIR}/${prompt}.sh"
+    . "$BIMHAW_DIR/active/lib/sh/prompts/${prompt}.sh"
 fi

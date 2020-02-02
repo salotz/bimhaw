@@ -14,7 +14,7 @@
 # bash's startup sequence, which means this file suddenly has to cater
 # for two different shells.
 
-. "$ACTIVE_SH_DIR/login.sh"
+. "$BIMHAW_DIR/active/shells/sh/login.sh"
 
 
 

@@ -9,5 +9,5 @@ logouts={{ sh_logouts }}
 
 # source each env there
 for logout in $logouts; do
-    . "$SHELL_LOGOUT_DIR/${logout}.sh"
+    . "$BIMHAW_DIR/active/lib/sh/logouts/${logout}.sh"
 done

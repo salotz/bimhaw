@@ -4,35 +4,14 @@ import pkgutil
 import os
 import os.path as osp
 
-from bimhaw import CONFIG_DIR
-
-SHELL_DOTFILES_DIRNAME = 'shell_dotfiles'
-LIB_DIRNAME = 'lib'
-PROFILES_DIRNAME = 'profiles'
-
-SHELL_DOTFILE_NAMES = (
-    'profile',
-    'bash_profile',
-    'bashrc',
-    'bash_logout',
+from . import (
+    CONFIG_DIR,
+    LIB_DIRNAME,
+    SHELL_DOTFILES_DIRNAME,
+    SHELL_DOTFILE_NAMES,
+    PROFILES_DIRNAME
 )
 
-LIB_DIRS = (
-    'setups',
-    'configs',
-    'inits',
-    'checkins',
-    'checkouts',
-    'shell/sh/aliases',
-    'shell/sh/envs',
-    'shell/sh/funcs',
-    'shell/sh/logouts',
-    'shell/sh/prompts',
-    'shell/bash/envs',
-    'shell/bash/funcs',
-    'shell/bash/prompts',
-    'shell/bash/autocomplete',
-)
 
 @click.command()
 @click.option("--config", default=None, type=click.Path(exists=True))

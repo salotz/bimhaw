@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # common functionality
-. "$ACTIVE_SH_DIR/funcs.sh"
+. "$BIMHAW_DIR/active/shells/sh/funcs.sh"
 
 # common aliases
-. "$ACTIVE_SH_DIR/aliases.sh"
+. "$BIMHAW_DIR/active/shells/sh/aliases.sh"
 
 # common environments for nonlogin shells
 
@@ -14,7 +14,7 @@
 
 # WARN: This is needs to be called because the login_env.sh file will not be
 # called when starting bash up.
-. "${ACTIVE_SH_DIR}/nonlogin_env.sh"
+. "$BIMHAW_DIR/active/shells/sh/nonlogin_env.sh"
 
 # bash only interactive prompt configurations
 
@@ -22,14 +22,14 @@
 libs={{ bash_interactive_envs }}
 
 for lib in $libs; do
-    . "$BASH_ENV_DIR/${lib}.bash"
+    . "$BIMHAW_DIR/active/lib/bash/envs/${lib}.bash"
 done
 
 
 ## Prompt customization
 
-. "$ACTIVE_BASH_DIR/prompt.bash"
+. "$BIMHAW_DIR/active/shells/bash/prompt.bash"
 
 ## autocompletion
-. "$ACTIVE_BASH_DIR/autocompletion.bash"
+. "$BIMHAW_DIR/active/shells/bash/autocompletion.bash"
 

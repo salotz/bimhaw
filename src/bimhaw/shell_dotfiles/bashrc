@@ -14,7 +14,7 @@
 source "$HOME/.bimhaw/env.sh" || exit 1
 
 # startup file for non-login interactive shell
-. "$ACTIVE_BASH_DIR/interactive.bash"
+. "$BIMHAW_DIR/active/shells/bash/interactive.bash"
 
 
 ####
