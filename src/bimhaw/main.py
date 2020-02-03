@@ -40,7 +40,7 @@ def link_shells(cx, force=False):
 @task
 def current(cx):
 
-    result = cx.run('readlink "{CONFIG_DIR}/active"', hide=True)
+    result = cx.run(f'readlink "{CONFIG_DIR}/active"', hide=True)
 
     profile_str = result.stdout.strip().split('/')[-1]
     print(profile_str)
