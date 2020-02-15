@@ -1,4 +1,4 @@
 #!/bin/sh
 
-# run the bash logout script
-"$BIMHAW_DIR/active/shell/sh/logout.sh"
+# source the bash logout script
+source "$BIMHAW_DIR/active/shells/sh/logout.sh"
