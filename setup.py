@@ -22,7 +22,7 @@ abstract_requirements = [
 
 setup(
     name='bimhaw',
-    version='v0.1',
+    version='2020-03-06a0.dev0',
     author="Samuel D. Lotz",
     author_email="samuel.lotz@salotz.info",
     description="Modern useful dotfile management",
