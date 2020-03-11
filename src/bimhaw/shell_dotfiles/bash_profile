@@ -29,10 +29,10 @@ source "$HOME/.bimhaw/env.sh" || exit 1
 # make scripts do it on their own or if you are running commands:
 # `bash -lc "command"`
 
-# export BASH_ENV="$BIMHAW_DIR/shells/sh/nonlogin_env.sh"
+export BASH_ENV="$BIMHAW_DIR/shells/sh/nonlogin_env.sh"
 
 # otherwise make sure it isn't set
-BASH_ENV=""
+# export BASH_ENV=""
 
 
 # Run the interactive bash script if this is a login shell
