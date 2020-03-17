@@ -1,3 +1,8 @@
 from invoke import task
 
-from ..config import *
+@task
+def sanity(cx):
+    """Perform sanity check for jubeo"""
+
+    print("All systems go!")
+

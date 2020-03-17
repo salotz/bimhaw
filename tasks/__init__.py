@@ -2,21 +2,8 @@ from invoke import Collection, Task, task
 
 import inspect
 
-# the toplevel commands module
-from . import toplevel
 
-# core modules for this project
-from .modules import core
-from .modules import py
-from .modules import git
-from .modules import meta
-from .modules import project
-from .modules import org
-from .modules import env
-from .modules import update
-
-# then load all of the submodule namespaces
-modules = [core, py, git, project, org, env, update, ]
+## Utilities
 
 # these helper functions are for automatically listing all of the
 # functions defined in the tasks module
@@ -31,20 +18,26 @@ def _get_functions(mod):
     return {func.__name__ : func for func in mod.__dict__.values()
             if _is_mod_task(mod, func) }
 
+
+## Namespace
+
 # add all of the modules to the CLI
 ns = Collection()
 
-# get all the functions from the toplevel module, and add them to the
-# toplevel collection
+## Top-level
+
+from . import toplevel
 for func in _get_functions(toplevel).values():
     ns.add_task(func)
 
+## Upstream
 
+from .modules import MODULES as modules
 
 for module in modules:
     ns.add_collection(module)
 
-# then the user defined plugins
+## Plugins
 
 try:
     # import all the user defined stuff and override
