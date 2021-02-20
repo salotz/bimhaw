@@ -217,7 +217,7 @@ Lets say we want to create a common use profile.
 We would edit the ~config.py~ file so that it looked something like
 this:
 
-[[file:docs/example_config.py][file:~/tree/lab/devel/bimhaw/docs/example_config.py]]
+[[file:docs/example_config.py][file:docs/example_config.py]]
 
 Apologies for the verboseness, but I didn't want to commit to any
 configuration system as of now.
@@ -513,3 +513,8 @@ necessary for this trick of dependencies, and most of the actual
 content of the configurations is found, logically, in with the rest of
 the configurations under the name of the shell, which may have
 configurations added as if it were any other program.
+
+* Alternatives
+
+- https://drewdevault.com/2019/12/30/dotfiles.html
+- Chezmoi
