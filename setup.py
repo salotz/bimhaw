@@ -45,7 +45,10 @@ setup(
     install_requires=abstract_requirements,
 
     entry_points={
-        'console_scripts' : ['bimhaw = bimhaw.cli:program.run'],
+        'console_scripts' : [
+            'bimhaw = bimhaw.cli:program.run',
+            'bimhaw_init = bimhaw.init:cli',
+        ],
     },
 
     include_package_data=True,

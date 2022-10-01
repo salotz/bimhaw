@@ -7,16 +7,17 @@ import os.path as osp
 from . import (
     CONFIG_DIR,
     LIB_DIRNAME,
+    LIB_DIRS,
     SHELL_DOTFILES_DIRNAME,
     SHELL_DOTFILE_NAMES,
     PROFILES_DIRNAME
 )
 
 
-@click.command()
-@click.option("--config", default=None, type=click.Path(exists=True))
-@click.option("--lib", default=None, type=click.Path(exists=True))
-def cli(config, lib):
+def initialize(
+        config=None,
+        lib=None,
+):
 
     dotfiles_dir = osp.join(CONFIG_DIR, SHELL_DOTFILES_DIRNAME)
     os.makedirs(dotfiles_dir)
@@ -75,6 +76,14 @@ def cli(config, lib):
     # the profiles dir
     profiles_dir = osp.join(CONFIG_DIR, PROFILES_DIRNAME)
     os.makedirs(profiles_dir)
+
+
+@click.command()
+@click.option("--config", default=None, type=click.Path(exists=True))
+@click.option("--lib", default=None, type=click.Path(exists=True))
+def cli(config, lib):
+
+    initialize(config, lib)
 
 
 if __name__ == "__main__":
