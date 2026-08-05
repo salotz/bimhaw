@@ -1,0 +1,8 @@
+default_priority: medium
+auto_stage: true
+labels:
+    - bug
+    - feature
+    - auth
+    - security
+    - docs
