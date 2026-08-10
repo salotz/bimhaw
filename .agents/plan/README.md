@@ -1,6 +1,6 @@
 # Upgrade Plan: Conform bimhaw to Agent Guidelines
 
-**Status**: Plan Only — Not Started (Execution Pending Explicit User Request)
+**Status**: Plan Only — Step 0002 Complete; Remaining Execution Pending Explicit User Request
 
 **Date**: 2026-08-10
 
@@ -65,7 +65,7 @@ The steps below are the initial set. They may be refined, split, or superseded v
 See the individual step documents:
 
 - [0001-create-plan-folder.md](0001-create-plan-folder.md) — Establish the `.agents/plan/` location and this baseline document (self-referential bootstrap step).
-- [0002-update-root-agents-md.md](0002-update-root-agents-md.md) — Replace/update `AGENTS.md` to follow the official `agents_md_template.md` (customized for bimhaw) and point to `.agents/plan/`, `design/`, `contributing/`, `.agents/`.
+- [0002-update-root-agents-md.md](0002-update-root-agents-md.md) — Replace/update `AGENTS.md` to follow the official `agents_md_template.md` (customized for bimhaw) and point to `.agents/plan/`, `design/`, `contributing/`, `.agents/`. (Completed)
 - [0003-create-contributing-dir.md](0003-create-contributing-dir.md) — Create top-level `contributing/` with `README.md` (and optional `AGENTS.md`). Base on RFC 22 and cached snippets from `.agents/references/agent-guidelines/contributing/`. Add initial role/workflow docs as needed.
 - [0004-create-agents-dir.md](0004-create-agents-dir.md) — Create `.agents/` per RFC 22 for agent-specific context. Include `context/`, stubs for `skills/`, and any host-specific notes per RFC 23. Place discoverable context files here.
 - [0005-complete-design-folder.md](0005-complete-design-folder.md) — Finish `design/` conformance:

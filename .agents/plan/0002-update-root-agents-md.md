@@ -1,8 +1,30 @@
 # Plan Step 0002: Update Root `AGENTS.md` to Follow Official Template
 
-**Status**: Not Started
+**Status**: Completed (2026-08-10)
 
 **Dependencies**: 0001 (plan folder established)
+
+**Execution**:
+- Read template (`agents_md_template.md`), current `AGENTS.md`, `design/README.md`, `design/goals.md`, `design/glossary.md`, plan step 0002, and relevant sections of `generic-agent-guidelines.md` using `summarize`.
+- Adapted template for bimhaw:
+  - "Project Description" filled from original AGENTS.md + design/ (brief).
+  - "How to Use" updated with adoption note and incremental disclosure.
+  - "Project Intent" links to `design/goals.md`.
+  - "Terminology" links to `design/glossary.md`.
+  - Added sections pointing to:
+    - `.agents/plan/` (this upgrade plan, under agent context)
+    - `design/` (full)
+    - `contributing/` (to be created)
+    - `.agents/` (to be created, with `.agents/references/agent-guidelines/`)
+  - Referenced cached guidelines under `.agents/references/agent-guidelines/`.
+  - Mentioned RFC 22/23/24 adoption explicitly.
+  - Added general guidance: task-specific tools, caching, compacted inlining.
+- Used `write` (clean replacement) to update root `AGENTS.md` (no shell `cat`/`cp`).
+- Kept concise (~95 lines), human-readable, effective for agents (TOC style, incremental disclosure).
+- Verified with `tree` (root) and `summarize` on new `AGENTS.md` (content matches adapted template + bimhaw specifics + pointers).
+- Session TODO updated throughout.
+- All via task-specific tools only.
+- Cross-references: points to plan, design, future contributing/.agents; no other updates needed at this stage.
 
 ## Context
 
