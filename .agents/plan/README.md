@@ -66,7 +66,7 @@ See the individual step documents:
 
 - [0001-create-plan-folder.md](0001-create-plan-folder.md) — Establish the `.agents/plan/` location and this baseline document (self-referential bootstrap step).
 - [0002-update-root-agents-md.md](0002-update-root-agents-md.md) — Replace/update `AGENTS.md` to follow the official `agents_md_template.md` (customized for bimhaw) and point to `.agents/plan/`, `design/`, `contributing/`, `.agents/`. (Completed)
-- [0003-create-contributing-dir.md](0003-create-contributing-dir.md) — Create top-level `contributing/` with `README.md` (and optional `AGENTS.md`). Base on RFC 22 and cached snippets from `.agents/references/agent-guidelines/contributing/`. Add initial role/workflow docs as needed.
+- [0003-create-contributing-dir.md](0003-create-contributing-dir.md) — Create top-level `contributing/` with bare-minimum package maintainer docs (`README.md` + `development.md`): editable install, layout, supported `inv` build/clean/publish tasks vs jubeo scaffolding to ignore. No invented processes/roles/tests/docs workflows.
 - [0004-create-agents-dir.md](0004-create-agents-dir.md) — Create `.agents/` per RFC 22 for agent-specific context. Include `context/`, stubs for `skills/`, and any host-specific notes per RFC 23. Place discoverable context files here.
 - [0005-complete-design-folder.md](0005-complete-design-folder.md) — Finish `design/` conformance:
   - Add `decisions/0000_adr-template.md` (Nygard style from RFC 22).
@@ -101,6 +101,10 @@ See the individual step documents:
 - `.agents/` (future, this location) — Pure agent harness context, skills, extra files, and plans/references.
 - `.issues/` — Issue tracker (lightweight file-based).
 - `.agents/plan/` — This folder. For upgrade/refactor/feature plans and their steps.
+
+## Related plans
+
+- **[Modern DX: mise + uv + hatch + just](dx-modern-toolchain/README.md)** — separate series. **mise** pins/installs host tools (uv, just) and project env vars; **hatchling** + **uv** for packaging; **just** for tasks; removes invoke/`tasks/`. **Supersedes the `inv …` command surface** in structure step 0003; when writing `contributing/development.md`, prefer mise → uv/just.
 
 ## Next Actions (When User Requests Execution)
 
