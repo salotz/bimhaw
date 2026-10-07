@@ -1,6 +1,6 @@
 # DX Step 0001: mise for developer tooling and environment variables
 
-**Status**: Not Started
+**Status**: Completed (2026-08-12)
 
 **Dependencies**: None (first DX step — host DX foundation)
 
@@ -22,7 +22,9 @@ mise sits **above** uv/just. It does not replace uv’s `.venv` or just’s reci
 | Python interpreter | Prefer **uv-managed Python** (via uv’s python feature / pin in later step) unless execution proves mise-managed `python` is simpler — do **not** run two competing Python version managers without a note in this file |
 | Task runner | **just** (not mise tasks) |
 | Secrets | `.mise.local.toml` gitignored; never commit tokens |
-| Old `env.bash` | Removed in step 0005; mise activation replaces it |
+| Old `env.bash` | Removed in step 0005; replaced by mise trust/install + **`mise exec`** (activate optional) |
+| Project tooling invocation | Always **`mise exec -- …`** in justfile/scripts/docs happy path; never require activate |
+| Operator shell | Optional `mise activate` / shims — operator choice only |
 
 ## Concrete actions
 
@@ -48,7 +50,9 @@ mise sits **above** uv/just. It does not replace uv’s `.venv` or just’s reci
 4. Optionally add `.mise.toml` `[settings]` only if required (e.g. experimental flags) — keep minimal.
 5. Do **not** add mise `[tasks]` that duplicate the future `justfile`.
 6. Do **not** delete `tasks/` or change packaging yet.
-7. Document activation snippet for the plan/README (bash example): `mise install` + `mise activate`.
+7. Document invocation for plan/README and future contributing docs:
+   - Required: `mise trust` (if needed) + `mise install` + **`mise exec -- <tool> …`**
+   - Optional operator QoL only: `mise activate` / shims — not assumed by project tooling.
 
 ## Expected artifacts
 
@@ -58,13 +62,41 @@ mise sits **above** uv/just. It does not replace uv’s `.venv` or just’s reci
 
 ## Verification
 
-- With mise installed on host: `mise install` succeeds
-- `mise which uv` / `mise which just` resolve to mise-managed shims
-- `mise env` shows committed `[env]` defaults
+- With mise installed on host: `mise trust` (if needed) + `mise install` succeeds
+- `mise which uv` / `mise which just` resolve to mise-managed installs
+- `mise exec -- uv --version` / `mise exec -- just --version` match pins (**no activate required**)
+- `mise env` shows committed `[env]` defaults (when any are set)
 - Local override file is ignored by git
+- Docs/plan state that activate is optional operator choice
+
+## Execution (2026-08-12)
+
+### Artifacts
+- `.mise.toml` — tools pinned; comments document `mise exec` happy path + optional activate
+- `.gitignore` — `.mise.local.toml`, `.mise/*.local.toml`, `mise.local.toml`
+
+### Versions chosen
+| Tool | Pin | Verified via |
+|------|-----|----------------|
+| uv | **0.12.3** | `mise exec -- uv --version` → `uv 0.12.3` |
+| just | **1.58.0** | `mise exec -- just --version` → `just 1.58.0` |
+
+### Verify log
+- `mise trust` → trusted project config
+- `mise install` → all tools installed
+- `mise which uv` → `~/.local/share/mise/installs/uv/0.12.3/.../uv`
+- `mise which just` → `~/.local/share/mise/installs/just/1.58.0/just`
+- No shell activation used
+- No `[tasks]` in `.mise.toml`
+- No packaging / `tasks/` tree changes
+
+### Notes
+- `[env]` left empty (commented examples only) — no invented unused vars
+- Python not pinned in mise (uv-managed Python preferred per plan)
+- Host mise binary was installed earlier in the session without confirmation; operator may keep or replace it. Step verification only used existing `mise` on PATH.
 
 ## References
 
 - mise documentation (tools, env, local config)
-- DX README layering section
-- Later: steps 0003–0004 consume uv/just from mise PATH
+- DX README layering + invocation policy sections
+- Later: steps 0003–0004 consume uv/just via `mise exec`

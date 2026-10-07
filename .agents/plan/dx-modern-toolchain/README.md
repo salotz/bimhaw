@@ -1,6 +1,6 @@
 # Plan: Modern Developer Experience (mise + uv + hatch + just)
 
-**Status**: Plan Only — Not Started (Execution Pending Explicit User Request)
+**Status**: In Progress — Steps 0001–0002 Complete; Remaining Execution Pending Explicit User Request
 
 **Date**: 2026-08-10
 
@@ -24,7 +24,7 @@ Replace the legacy setuptools + invoke/jubeo maintainer stack with a small moder
 ### Layering (do not collapse these roles)
 
 ```
-mise          → install/pin host CLIs (uv, just, …); project env vars; shell activation
+mise          → install/pin host CLIs (uv, just, …); project env vars
   uv          → Python version (as chosen), venv, lockfile, run, build, publish
   hatchling   → build backend only (pulled by uv when building) — not a second env manager
   just        → thin task recipes that call uv/git/rm — not a package manager
@@ -33,6 +33,15 @@ mise          → install/pin host CLIs (uv, just, …); project env vars; shell
 **mise does not replace just** for maintainer tasks (no competing task runners).  
 **mise does not replace uv** for Python dependencies or publishing.  
 **hatch envs are out of scope** — uv owns the Python env story.
+
+### Invocation policy (project tooling vs operator shell)
+
+| Who | How tools are run |
+|-----|-------------------|
+| **In-repo project tooling** (justfile, scripts, CI, agent-run commands, docs “copy-paste” happy path) | Call **`mise exec -- …`** (or equivalent) so pinned uv/just/env apply **without** requiring shell activation |
+| **Operator interactive shell** | Optional: `mise activate` / shims / nothing — **operator choice**. Never required for project recipes to work |
+
+Rationale: auto-activation is a personal shell preference. Internal tooling must not assume PATH was mutated by activate hooks.
 
 Goals:
 
@@ -99,7 +108,9 @@ Everything else in `tasks/` is **not** migrated — deleted with the scaffolding
   - `[env]`: non-secret project env defaults (e.g. helpful `UV_*` non-secret settings, project markers, documentation-oriented vars).
   - Do **not** put PyPI tokens in committed config.
 - **`.mise.local.toml`** (gitignored): developer-local overrides and secrets (e.g. `UV_PUBLISH_TOKEN`, personal index URLs).
-- **Activation**: `mise install` then `mise activate <shell>` (or `mise exec -- …` / direnv-style trust as documented).
+- **Trust + install**: `mise trust` (if needed) then `mise install` for pinned tools.
+- **Default invocation for anything in-repo**: `mise exec -- <tool> …` (does not depend on activate).
+- **Activation / shims**: optional operator shell integration only — not assumed by justfile, scripts, or contributing “run this” commands.
 - Replaces the “install uv and just yourself from random docs” story and replaces inv-centric `env.bash`.
 
 ### uv (Python package workflow)
@@ -131,28 +142,32 @@ Everything else in `tasks/` is **not** migrated — deleted with the scaffolding
 # one-time host bootstrap
 # install mise (https://mise.jdx.dev) — only global prerequisite
 
-# enter project: trust/install tools + env from .mise.toml
-mise install
-eval "$(mise activate bash)"   # or fish/zsh; or use mise exec -- …
+# once per clone (or when pins change): trust if prompted, install tools
+mise trust                       # if config not trusted yet
+mise install                     # installs pinned uv + just from .mise.toml
 
-# python deps
-uv sync                          # .venv from uv.lock + pyproject groups
+# --- happy path: no shell activation required ---
+# python deps / packaging (always via mise exec in docs & automation)
+mise exec -- uv sync
+mise exec -- uv build
+mise exec -- uv publish --index testpypi
 
-# quality of life (just wrappers; tools on PATH via mise)
-just clean                       # dist, build, caches, *~
-just build                       # uv build
-just publish-test                # uv publish → TestPyPI
-just publish                     # uv publish → PyPI (explicit, careful)
-just tag VERSION=x.y.z           # git annotated tag v×
-
-# or call uv directly once mise has put it on PATH
-uv build
-uv publish --index testpypi
+# maintainer tasks: just is also under mise
+mise exec -- just clean
+mise exec -- just build
+mise exec -- just publish-test
+mise exec -- just publish
+mise exec -- just tag VERSION=x.y.z
 
 # product CLI (runtime invoke until CLI migration)
-uv run bimhaw ...
-uv run bimhaw_init ...
+mise exec -- uv run bimhaw ...
+mise exec -- uv run bimhaw_init ...
+
+# --- optional operator QoL (not required by project tooling) ---
+# eval "$(mise activate bash)"   # or shims; then bare `uv` / `just` may work in that shell
 ```
+
+**Writing project tooling:** justfile recipes, scripts, and CI should invoke `uv` (and any other mise-managed CLI) as `mise exec -- uv …` (or document a single entrypoint that does). Do **not** require `mise activate` for those paths.
 
 Local secrets / overrides:
 
@@ -165,8 +180,8 @@ Local secrets / overrides:
 
 | Step | File | Summary |
 |------|------|---------|
-| 0001 | [0001-mise-tooling-and-env.md](0001-mise-tooling-and-env.md) | Add `.mise.toml` (tools: uv, just; env defaults); gitignore `.mise.local.toml`; document activation |
-| 0002 | [0002-pyproject-hatch.md](0002-pyproject-hatch.md) | Add `pyproject.toml` (hatchling); metadata/deps/scripts/package data; unify version |
+| 0001 | [0001-mise-tooling-and-env.md](0001-mise-tooling-and-env.md) | Add `.mise.toml` (tools: uv, just; env defaults); gitignore `.mise.local.toml`; document activation | **Completed** |
+| 0002 | [0002-pyproject-hatch.md](0002-pyproject-hatch.md) | Add `pyproject.toml` (hatchling); metadata/deps/scripts/package data; unify version | **Completed** |
 | 0003 | [0003-uv-lock-and-workflow.md](0003-uv-lock-and-workflow.md) | uv workflow via mise-provided uv; groups + `uv.lock`; retire loose requirements |
 | 0004 | [0004-justfile-tasks.md](0004-justfile-tasks.md) | `justfile` bare-minimum recipes; assume mise activated PATH |
 | 0005 | [0005-remove-invoke-tasks.md](0005-remove-invoke-tasks.md) | Delete `tasks/`, `env.bash`; drop invoke-as-dev-runner |
@@ -180,6 +195,7 @@ Local secrets / overrides:
 - Do not migrate tests/docs/env task ghosts.
 - Keep product behavior stable; packaging/DX only.
 - Do not commit secrets; use `.mise.local.toml` pattern.
+- **Config files stay content-focused** (`.mise.toml`, `justfile`, `pyproject.toml`, etc.): no long usage/bootstrap preambles—only brief comments on specific choices. Usage belongs in `contributing/` (enforced when writing those docs in step 0006).
 - Update this README statuses as steps complete.
 - Track actionable work in `.issues/` when executing.
 - Structural decision → ADR in `design/decisions/` (step 0006).
@@ -192,17 +208,18 @@ Local secrets / overrides:
 
 ## Success criteria
 
-- [ ] `.mise.toml` pins at least **uv** and **just**; `mise install` provides them on PATH when activated
+- [ ] `.mise.toml` pins at least **uv** and **just**; `mise install` installs them for `mise exec` / `mise which`
 - [ ] Non-secret env defaults live in `.mise.toml` `[env]`; secrets documented for `.mise.local.toml` (gitignored)
+- [ ] In-repo tooling and docs happy path use **`mise exec -- …`**; shell activate/shims documented only as optional operator choice
 - [ ] `env.bash` gone; no inv-completion bootstrap
 - [ ] `pyproject.toml` is the single packaging source; `setup.py` removed (or justified stub only)
-- [ ] `uv sync` gives a working editable env; `uv build` produces sdist+wheel including package data
-- [ ] Console scripts install and run (`bimhaw`, `bimhaw_init`)
-- [ ] `just clean` / `just build` work under mise-activated shell; publish recipes documented and dry-runnable
+- [ ] `mise exec -- uv sync` works; `mise exec -- uv build` produces sdist+wheel including package data
+- [ ] Console scripts install and run (`bimhaw`, `bimhaw_init`) via `mise exec -- uv run …`
+- [ ] `mise exec -- just clean` / `just build` work without activate; publish recipes documented and dry-runnable
 - [ ] `tasks/` gone
 - [ ] invoke is not a **dev task** dependency; runtime dep only if CLI still uses it (called out in docs)
 - [ ] Version has one source of truth
-- [ ] Contributing/plan docs describe **mise + uv + hatch + just**, not jubeo
+- [ ] Contributing/plan docs describe **mise + uv + hatch + just**, not jubeo; include “writing project tooling” note (`mise exec`)
 
 ## References
 

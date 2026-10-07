@@ -191,9 +191,12 @@ A separate plan, [`.agents/plan/dx-modern-toolchain/`](dx-modern-toolchain/READM
 **When executing this contributing step:**
 
 - If the DX plan is accepted or already executed, document **mise → uv / just** (plus `pyproject.toml` / `uv.lock` / `.mise.toml`) — do **not** teach `inv py.*` as the happy path.
-- Host bootstrap is **install mise once**; then `mise install` + activate supplies uv and just. Do not primary-path “brew install uv and just” separately.
+- Host bootstrap is **install mise once**; then `mise trust` (if needed) + `mise install`. Do not primary-path “brew install uv and just” separately.
+- **Happy path for all project commands:** `mise exec -- uv …` / `mise exec -- just …`. Do **not** require `mise activate`.
+- **Writing project tooling** (document explicitly): justfile, scripts, CI, and agent commands must call mise-managed tools via `mise exec` (or an entrypoint that does). Ambient PATH / activate hooks are operator choice only.
+- Optional operator QoL: `mise activate` or shims — mention briefly; never as a prerequisite for recipes.
 - Env vars: non-secret defaults in `.mise.toml` `[env]`; publish tokens etc. in `.mise.local.toml` only.
-- If contributing docs must land *before* DX execution, either (a) briefly document current inv commands as transitional, or (b) document the **target** mise/uv/just surface and point at the DX plan.
+- If contributing docs must land *before* DX execution, either (a) briefly document current inv commands as transitional, or (b) document the **target** mise exec surface and point at the DX plan.
 - Runtime **`invoke` may remain** as a dependency of the product `bimhaw` CLI (`bimhaw.cli` / `main.py`) even after `tasks/` is deleted — call that out so contributors do not “remove invoke entirely” by mistake.
 
 Keep/drop **intent** from the analysis above still applies (clean/build/publish/tag only; no tests/docs/env ghosts). Only the **tooling stack** changes under DX.

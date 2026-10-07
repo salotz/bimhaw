@@ -15,9 +15,11 @@ Confirm the migration meets success criteria without reintroducing jubeo scaffol
 - [ ] `.mise.toml` present; pins **uv** and **just**
 - [ ] `mise install` succeeds on clean machine story (mise itself preinstalled)
 - [ ] `mise which uv` / `mise which just` resolve to mise-managed tools
+- [ ] **`mise exec -- uv --version`** / **`just --version`** work **without** `mise activate`
 - [ ] Committed `[env]` defaults visible via `mise env` (if any)
 - [ ] `.mise.local.toml` gitignored; documented for secrets
-- [ ] No `env.bash`; shell story is mise activate (or `mise exec`)
+- [ ] No `env.bash`; project happy path is `mise exec` (activate optional only)
+- [ ] Contributing/docs state activate is operator choice; tooling uses `mise exec`
 
 ### Packaging
 
@@ -30,24 +32,25 @@ Confirm the migration meets success criteria without reintroducing jubeo scaffol
 
 ### Install & entry points
 
-- [ ] `uv sync` works on clean checkout (under mise-activated shell)
-- [ ] `uv run bimhaw` — help or expected invoke CLI behavior
-- [ ] `uv run bimhaw_init` — click CLI help
+- [ ] `mise exec -- uv sync` works on clean checkout **without** activate
+- [ ] `mise exec -- uv run bimhaw` — help or expected invoke CLI behavior
+- [ ] `mise exec -- uv run bimhaw_init` — click CLI help
 - [ ] Runtime: `import invoke` still available in env (until CLI migration)
 - [ ] No `import tasks` / no `tasks/` directory
 
 ### Task runner
 
-- [ ] `just --list` shows only bare-minimum recipes
-- [ ] `just clean` removes dist/build caches without deleting source
-- [ ] `just build` succeeds via uv
+- [ ] `mise exec -- just --list` shows only bare-minimum recipes
+- [ ] `mise exec -- just clean` removes dist/build caches without deleting source
+- [ ] `mise exec -- just build` succeeds via uv
 - [ ] publish recipes documented; dry-run or --help path safe (no accidental real PyPI upload)
 
 ### Docs
 
-- [ ] `contributing/development.md` is mise-first; matches actual commands
+- [ ] `contributing/development.md` is mise-first + **`mise exec`** happy path; activate optional
+- [ ] “Writing project tooling” rules present (mise exec; no activate required)
 - [ ] Structure plan step 0003 aligned
-- [ ] ADR recorded (mise + uv + hatch + just)
+- [ ] ADR recorded (mise + uv + hatch + just + exec policy)
 - [ ] DX plan README success criteria checked off
 
 ### Process
@@ -55,6 +58,7 @@ Confirm the migration meets success criteria without reintroducing jubeo scaffol
 - [ ] Prefer task-specific tools for file inspection; shell OK for mise/uv/just verification
 - [ ] No new test/docs/env scaffolding invented “to fill the gap”
 - [ ] No secrets committed
+- [ ] No verification step depends on operator having run `mise activate`
 
 ## Concrete actions
 

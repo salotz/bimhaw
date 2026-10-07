@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bimhaw"
+description = "Modern useful dotfile management"
+license = "MIT"
+authors = [
+  { name = "Samuel D. Lotz", email = "samuel.lotz@salotz.info" },
+]
+requires-python = ">=3.8"
+classifiers = [
+  "Topic :: Utilities",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+  "invoke",
+  "jinja2",
+  "click",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/salotz/bimhaw"
+Repository = "https://github.com/salotz/bimhaw"
+
+[project.scripts]
+bimhaw = "bimhaw.cli:program.run"
+bimhaw_init = "bimhaw.init:cli"
+
+[tool.hatch.version]
+path = "src/bimhaw/_version.py"
+
+# src/ layout — includes non-Python package data beside modules.
+[tool.hatch.build.targets.wheel]
+packages = ["src/bimhaw"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/pyproject.toml",
+  "/README.org",
+]

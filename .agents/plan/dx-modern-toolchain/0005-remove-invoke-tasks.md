@@ -8,7 +8,7 @@
 
 `tasks/` is jubeo-style invoke scaffolding. Most tasks are broken or assume missing trees. Maintainer surface is mise → just + uv. **Product CLI still imports invoke** — do not remove runtime dependency or rewrite `bimhaw.main` in this step.
 
-`env.bash` only enabled inv completion; **mise activation** is the replacement for developer shell setup.
+`env.bash` only enabled inv completion; replacement is **mise trust/install + `mise exec`** for project commands. Optional `mise activate` is operator shell QoL only.
 
 ## Delete list
 
@@ -26,7 +26,7 @@
 
 ## Concrete actions
 
-1. Confirm `just clean` / `just build` work without `tasks/` under mise-activated shell.
+1. Confirm `mise exec -- just clean` / `just build` work without `tasks/` and **without** shell activate.
 2. Delete `tasks/` tree and `env.bash`.
 3. Grep/summarize for remaining `inv ` / `env.bash` **dev** references; fix in step 0006 if not already gone.
 4. Ensure no packaging hook still expects `tasks` as a package.
@@ -37,7 +37,7 @@
 - No `tasks/` directory
 - No `env.bash`
 - Runtime invoke still installed with the app via uv
-- Developer shell story = mise only
+- Developer project commands = `mise exec`; activate optional
 
 ## Verification
 

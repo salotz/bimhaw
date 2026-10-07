@@ -12,7 +12,7 @@ Shell env vars that affect uv/publish come from **mise** `[env]` / `.mise.local.
 
 ## Concrete actions
 
-1. Ensure shell is mise-activated (`mise install` + activate) so `uv` matches `.mise.toml`.
+1. Ensure pinned uv is available via mise (`mise install`); invoke it as **`mise exec -- uv …`** (do **not** require shell activate).
 2. Define dependency groups in `pyproject.toml` (uv `[dependency-groups]`), e.g.:
    - project deps: click, jinja2, invoke (runtime CLI)
    - `dev`: optional interactive debug (ipython, pdbpp) — keep minimal
@@ -20,12 +20,12 @@ Shell env vars that affect uv/publish come from **mise** `[env]` / `.mise.local.
 3. Decide Python pin approach and document in contributing later:
    - Default: `uv python` pin / `.python-version` if needed, coordinated with `requires-python`
    - Avoid also pinning python in mise unless deliberately chosen in step 0001
-4. Generate `uv.lock` via `uv lock` / `uv sync`.
-5. Document canonical commands (all assume mise tools on PATH):
-   - `uv sync` — create/sync `.venv` + editable project
-   - `uv run bimhaw …` / `uv run bimhaw_init …`
-   - `uv build`
-   - `uv publish` (+ TestPyPI; tokens via mise local env, not committed files)
+4. Generate `uv.lock` via `mise exec -- uv lock` / `mise exec -- uv sync`.
+5. Document canonical commands (**always** `mise exec` in project docs/automation):
+   - `mise exec -- uv sync` — create/sync `.venv` + editable project
+   - `mise exec -- uv run bimhaw …` / `mise exec -- uv run bimhaw_init …`
+   - `mise exec -- uv build`
+   - `mise exec -- uv publish` (+ TestPyPI; tokens via mise local env, not committed files)
 6. Retire as **sources of truth**:
    - `requirements.txt`
    - `dev.requirements.txt`
@@ -45,10 +45,10 @@ Shell env vars that affect uv/publish come from **mise** `[env]` / `.mise.local.
 ## Verification
 
 - `mise which uv` points at mise-managed binary
-- `uv sync` succeeds
-- `uv run python -c "import bimhaw; print(bimhaw.__version__)"`
-- `uv run bimhaw` / help path works (invoke still runtime)
-- `uv build` produces sdist + wheel
+- `mise exec -- uv sync` succeeds (**no activate**)
+- `mise exec -- uv run python -c "import bimhaw; print(bimhaw.__version__)"`
+- `mise exec -- uv run bimhaw` / help path works (invoke still runtime)
+- `mise exec -- uv build` produces sdist + wheel
 
 ## References
 

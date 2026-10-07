@@ -1,0 +1,7 @@
+[tools]
+# Pin deliberately; bump when intentionally upgrading the toolchain.
+uv = "0.12.3"
+just = "1.58.0"
+
+# [env]
+# Non-secret project defaults only. Secrets go in gitignored .mise.local.toml.

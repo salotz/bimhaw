@@ -104,7 +104,7 @@ See the individual step documents:
 
 ## Related plans
 
-- **[Modern DX: mise + uv + hatch + just](dx-modern-toolchain/README.md)** — separate series. **mise** pins/installs host tools (uv, just) and project env vars; **hatchling** + **uv** for packaging; **just** for tasks; removes invoke/`tasks/`. **Supersedes the `inv …` command surface** in structure step 0003; when writing `contributing/development.md`, prefer mise → uv/just.
+- **[Modern DX: mise + uv + hatch + just](dx-modern-toolchain/README.md)** — separate series. **mise** pins/installs host tools (uv, just) and project env vars; **hatchling** + **uv** for packaging; **just** for tasks; removes invoke/`tasks/`. In-repo commands use **`mise exec -- …`**; shell activate/shims are optional operator choice. **Supersedes the `inv …` command surface** in structure step 0003; when writing `contributing/development.md`, document mise exec + “writing project tooling” rules.
 
 ## Next Actions (When User Requests Execution)
 

@@ -166,3 +166,11 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/python
+
+# mise — local overrides and secrets (never commit tokens)
+# https://mise.jdx.dev/configuration.html#mise-local-toml
+.mise.local.toml
+.mise/*.local.toml
+
+# Optional local mise trusted config noise (if present)
+mise.local.toml
