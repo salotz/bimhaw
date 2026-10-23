@@ -149,6 +149,13 @@ shell sources modules
 - Distinction between login/non-login and interactive modes is still exposed in the configuration structure, even though the goal is to hide it from the user.
 - No built-in support for "inheritance" or "composition" between profiles yet.
 - The system is heavily oriented around bash; other shells are not first-class.
+- Interactive bash has no **post-prompt** hook. Generated
+  `interactive.bash` sources `BASH_INTERACTIVE_ENVS`, then the prompt,
+  then autocompletions. Integrations that wrap `PROMPT_COMMAND` /
+  `PS1` (Eat, direnv, history sync) must either run after the prompt
+  or append instead of assigning. There is no `BASH_POST_PROMPT_ENVS`
+  (or equivalent) yet; user modules currently source such tools from
+  the prompt file.
 
 These are documented as current-state observations in the ADRs.
 

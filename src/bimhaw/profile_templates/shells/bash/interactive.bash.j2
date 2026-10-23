@@ -30,6 +30,15 @@ done
 
 . "$BIMHAW_DIR/active/shells/bash/prompt.bash"
 
+# TODO(bimhaw): post-prompt hook category.
+# Interactive envs run *before* the prompt. Prompts that assign
+# PROMPT_COMMAND (or rebuild PS1) clobber earlier wraps (history
+# sync, Eat, direnv). Workaround today: modules append to
+# PROMPT_COMMAND as an array, and Eat-like integrations are sourced
+# from the prompt itself. A generated post-prompt step (or a
+# BASH_POST_PROMPT_ENVS list sourced here) would let those stay
+# ordinary envs. See bimker eat.bash / salotz_dark.
+
 ## autocompletion
 . "$BIMHAW_DIR/active/shells/bash/autocompletion.bash"
 

@@ -25,6 +25,14 @@ As part of the decision to treat the project more professionally (including the 
 - Primarily designed around bash on Linux.
 - POSIX `sh` layer is supported via inheritance, but other shells (zsh, fish, etc.) are not first-class citizens.
 - Some logic around `$ENV` / `$BASH_ENV` and remote shells may be incomplete or brittle.
+- No post-prompt hook in generated interactive bash. Module categories
+  run envs → prompt → autocompletions. Tools that wrap `PROMPT_COMMAND`
+  (Eat shell integration, direnv, history `-a/-n`) cannot live in
+  `BASH_INTERACTIVE_ENVS` if the prompt assigns that variable.
+  Workaround: modules append to `PROMPT_COMMAND` as an array, and
+  terminal-specific integrations are sourced from the prompt.
+  Correct bimhaw fix: a generated post-prompt step (e.g.
+  `BASH_POST_PROMPT_ENVS`) sourced after `prompt.bash`.
 
 ### Architecture and Implementation
 - Multiple layers of indirection (generation, symlinks, runtime directory) that can be confusing.
