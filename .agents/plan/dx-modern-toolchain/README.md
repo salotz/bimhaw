@@ -55,7 +55,8 @@ Goals:
 Non-goals (this plan):
 
 - Migrating the **product** CLI off invoke (see “Runtime invoke” below).
-- Adding a test suite, Sphinx, CI, or conda.
+- Sphinx, CI, or conda.
+- A large test suite, coverage gates, tox, or jubeo `tests/tests/` trees. **Exception (2026-10-23):** a small pytest harness is required before the module-system rewrite — [testing-harness](../testing-harness/README.md). This DX plan only supplies `pytest` in a uv `dev` group, committed `uv.lock`, and a `just test` recipe. See [comprehensive-makeover](../comprehensive-makeover/README.md) Phase A.
 - Inventing a large release ceremony or multi-role contributor ladder.
 - Changing bimhaw’s shell-profile product behavior.
 - Using mise **tasks** as the primary task runner (just remains).

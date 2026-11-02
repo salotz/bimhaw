@@ -15,7 +15,7 @@ Shell env vars that affect uv/publish come from **mise** `[env]` / `.mise.local.
 1. Ensure pinned uv is available via mise (`mise install`); invoke it as **`mise exec -- uv …`** (do **not** require shell activate).
 2. Define dependency groups in `pyproject.toml` (uv `[dependency-groups]`), e.g.:
    - project deps: click, jinja2, invoke (runtime CLI)
-   - `dev`: optional interactive debug (ipython, pdbpp) — keep minimal
+   - `dev`: **pytest** (required for [testing-harness](../testing-harness/README.md)); optional interactive debug (ipython, pdbpp) — keep minimal
    - Do **not** re-add invoke as a “task runner” dev dep; do **not** port jubeo env.make/pin flows
 3. Decide Python pin approach and document in contributing later:
    - Default: `uv python` pin / `.python-version` if needed, coordinated with `requires-python`

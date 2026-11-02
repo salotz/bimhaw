@@ -106,6 +106,14 @@ See the individual step documents:
 
 - **[Modern DX: mise + uv + hatch + just](dx-modern-toolchain/README.md)** — separate series. **mise** pins/installs host tools (uv, just) and project env vars; **hatchling** + **uv** for packaging; **just** for tasks; removes invoke/`tasks/`. In-repo commands use **`mise exec -- …`**; shell activate/shims are optional operator choice. **Supersedes the `inv …` command surface** in structure step 0003; when writing `contributing/development.md`, document mise exec + “writing project tooling” rules.
 
+- **[Module system rework](module-system-rework/README.md)** — **product** makeover (2026-10-23, plan only). Modules become user-authored packages (no shipped catalogue; **agent skills** instead); profiles compose them with `extends`; generated phase-aware loader including **post-prompt**. Directory-local tools (mise activate / direnv) are a hard boundary: bimhaw does not version PATH or completions per cwd. **Do not collapse** with the DX plan: DX uses `mise exec` for *this repo’s* tooling; the product plan talks about optional *operator* `mise activate` in a user module. **Implementation 0002+ gated** on the testing harness.
+
+- **[Testing harness](testing-harness/README.md)** — **gate** before module-system implementation. Small isolated pytest for **current v1** behavior (`BIMHAW_DIR`, generation snapshots, CLI init/gen/load). Not the missing jubeo `tests/tests/` tree.
+
+- **[Comprehensive makeover](comprehensive-makeover/README.md)** — **umbrella sequence** (2026-10-23): Phase A DX remainder → Phase B harness (gate) → Phase C ADRs → Phase D module implementation → Phase E skills/docs. Plan only.
+
+- **[Agent explainability](agent-explainability/README.md)** — **separate product plan** (2026-10-23): `bimhaw explain`, per-module/prompt `explain.md`, RFC 23 `shell.md` snippet, Goose **consumer** skill (`bimhaw-shell`) so pasted structured PS1s and `@goose` sessions do not treat bimhaw as a stock `.bashrc`. Not gated on the module rewrite for v1 explain; does not ship a prompt theme.
+
 ## Next Actions (When User Requests Execution)
 
 Do not execute any of the steps below until the user explicitly says to start (e.g., "start executing the plan" or "execute step 0002").

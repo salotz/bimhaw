@@ -38,7 +38,7 @@ Optional tiny helpers (only if useful):
 
 ## Explicitly do **not** add
 
-- test/lint/docs/sphinx/website/benchmark recipes
+- lint/docs/sphinx/website/benchmark recipes (pytest **`test` recipe is required** — see table)
 - conda/venv jubeo `env.make` / pip-compile flows
 - mise `[tasks]` clones of every recipe (one task runner: just)
 - umbrella “release” that fails half-way (old `py.publish` / `py.release` bugs)
